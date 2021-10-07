@@ -25,6 +25,9 @@ body{
 }
 .video_bar{
     transform: translate(0, 100%);
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
     opacity: 0;
     width: 100%;
     background-color: #00000027;
@@ -50,4 +53,7 @@ body{
 }
 .current{
     display: block !important;
+}
+.duration{
+    color: #fff;
 }
