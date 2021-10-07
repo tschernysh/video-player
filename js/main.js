@@ -5,7 +5,11 @@ let pause = document.getElementsByClassName('pause')
 let current = document.getElementById('currentTime')
 let duration = document.getElementById('durationTime')
 let progress = document.getElementById('progress')
+let progressBar = document.getElementById('progressBar')
 
+let progressDrag = false
+
+console.log(video);
 
 const updateVideoStatus = () => {
     if(video.paused){
@@ -72,4 +76,24 @@ video.addEventListener( 'pause' , updateVideoStatus)
 video.addEventListener( 'loadeddata' , () => {
     updateVideoStatus()
     setDuration()
+})
+progressBar.addEventListener('mousedown', e => {  
+    progressDrag = true
+    video.currentTime = (video.duration/100) * ( (e.offsetX * 100) / progressBar.offsetWidth)
+    if(!video.paused){
+        video.pause()
+    }
+    updateCurrentTime()
+    updateProgress(video.currentTime, video.duration)
+})
+video.addEventListener('mousemove',  e => {;
+    if(progressDrag){
+        video.currentTime = (video.duration/100) * ( (e.offsetX * 100) / progressBar.offsetWidth)
+        updateCurrentTime()
+        updateProgress(video.currentTime, video.duration)
+    }
+})
+document.addEventListener('mouseup', () => {
+    video.play()
+    progressDrag = false
 })
