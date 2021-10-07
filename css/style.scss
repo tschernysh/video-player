@@ -1,14 +1,16 @@
+*{
+    box-sizing: border-box;
+}
 body{
     margin: 0;
     padding: 0;
     display: flex;
     align-items: center;
     height: 100vh;
-    background-color: #082032;
+    background-color: #171717;
 }
 .video_block{
-    width: 60%;
-    height: 60vh;
+    height: 70vh;
     margin: 0 auto;
     position: relative;
     overflow: hidden;
@@ -25,24 +27,56 @@ body{
 }
 .video_bar{
     transform: translate(0, 100%);
-    display: flex;
-    justify-content: space-between;
-    box-sizing: border-box;
     opacity: 0;
     width: 100%;
-    background-color: #00000027;
+    background-color: rgba(23, 23, 23, 0.3);
     position: absolute;
     bottom: 0;
     transition: all 1s;
     user-select: none;
-    height: 40px;
-    box-shadow: 0 0 20px 20px #00000034;
-    padding: 0 20px;
+    height: 50px;
+    box-shadow: 0 0 20px 50px rgba(23, 23, 23, 0.3);
     span{
         img{
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            height: 25px;
             cursor: pointer;
+        }
+    }
+    .button_bar{
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+    }
+    .progress_bar{
+        height: 5px;
+        width: 100%;
+        background-color: #171717;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        transition: all 0.5s;
+        cursor: pointer;
+        img{
+            width: 10px;
+            height: 10px;
+            transform: translate(-50%, 0);
+            opacity: 0;
+            transition: all 0.5s;
+            border-radius: 100%;
+            background-color: #EDEDED;
+        }
+        #progress{
+            height: 100%;
+            width: 0%;
+            background-color: #DA0037;
+            transition: all 0.2s;
+        }
+        &:hover{
+            background-color: #363636;
+            img{
+                opacity: 1;
+            }
         }
     }
 }
@@ -55,5 +89,9 @@ body{
     display: block !important;
 }
 .duration{
-    color: #fff;
+    color: #EDEDED;
+    font-family: Roboto;
+    font-weight: 300;
+    margin-left: 25px;
+    font-size: 16px;
 }

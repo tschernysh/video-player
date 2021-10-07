@@ -6,19 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>player</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     
     <div class="video_block">
-        <video autoplay muted id="video" src="media/PM.webm" ></video>
+        <video autoplay muted id="video" src="media/pm.mp4" ></video>
         <div class="video_bar">
-            <span id="toggle">
-                <img class="play" src="icons/play-solid.svg" alt="">
-                <img class="pause" src="icons/pause-solid.svg" alt="">
-            </span>
-            <span class="duration">
-                <small id="currentTime" ></small>
-            </span>
+            <div id="progressBar" class="progress_bar">
+                <div id="progress"></div>
+                <img src="icons/circle-regular.svg">
+            </div>
+            <div class="button_bar">
+                <span id="toggle">
+                    <img class="play" src="icons/play-solid.svg" alt="">
+                    <img class="pause" src="icons/pause-solid.svg" alt="">
+                </span>
+                <span class="duration">
+                    <small id="currentTime">0:00</small>
+                    <small>/</small>
+                    <small id="durationTime">0:00</small>
+                </span>
+            </div>
+            
         </div>
     </div>
 
