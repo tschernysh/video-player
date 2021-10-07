@@ -4,6 +4,7 @@ let play = document.getElementsByClassName('play')
 let pause = document.getElementsByClassName('pause')
 let current = document.getElementById('currentTime')
 
+console.log(video);
 
 const updateVideoStatus = () => {
     console.log(video.currentTime);
@@ -46,8 +47,15 @@ const toggleVideo = async () => {
 toggle.addEventListener('click', toggleVideo)
 video.addEventListener('click', toggleVideo)
 document.addEventListener('keydown', e => {
+    console.log(e);
     if(e.code === 'Space'){
         toggleVideo()
+    }else if(e.code === 'ArrowRight'){
+        video.currentTime = Math.floor(video.currentTime + 5)
+        updateCurrentTime()
+    }else if(e.code === 'ArrowLeft'){
+        video.currentTime = Math.floor(video.currentTime - 5)
+        updateCurrentTime()
     }
 })
 video.addEventListener( 'play' , updateVideoStatus)
