@@ -104,6 +104,11 @@ body {
   transition: all 0.2s;
 }
 
+#toggle {
+  width: 20px;
+  cursor: pointer;
+}
+
 #toggle img {
   display: none;
 }
@@ -116,8 +121,18 @@ body {
   color: #EDEDED;
   font-family: Roboto;
   font-weight: 300;
-  margin-left: 25px;
+  margin-left: 20px;
   font-size: 16px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.duration small:not(:nth-child(1)) {
+  margin-left: 5px;
 }
 
 #progressBar {
@@ -134,5 +149,49 @@ body {
 
 #progressBar:hover + .progress_bar img {
   opacity: 1 !important;
+}
+
+.volume_line {
+  width: 0;
+  overflow: hidden;
+  background-color: #171717;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  height: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+#volume {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: 20px;
+  position: relative;
+}
+
+#volume:hover .volume_line {
+  width: 80px !important;
+}
+
+#volume img {
+  cursor: pointer;
+  width: 30px;
+}
+
+#volumeBar {
+  width: 80px;
+  height: 20px;
+  position: absolute;
+  top: 3px;
+}
+
+#volumeLevel {
+  height: 5px;
+  z-index: 2;
+  background-color: #DA0037;
 }
 /*# sourceMappingURL=style.css.map */

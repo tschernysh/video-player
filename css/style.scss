@@ -75,6 +75,8 @@ body{
     }
 }
 #toggle{
+    width: 20px;
+    cursor: pointer;
     img{
         display: none;
     }
@@ -86,8 +88,13 @@ body{
     color: #EDEDED;
     font-family: Roboto;
     font-weight: 300;
-    margin-left: 25px;
+    margin-left: 20px;
     font-size: 16px;
+    display: flex;
+    align-items: center;
+    small:not(:nth-child(1)){
+        margin-left: 5px;
+    }
 }
 #progressBar{
     width: 100%;
@@ -102,4 +109,39 @@ body{
     img{
         opacity: 1 !important;
     }
+}
+.volume_line{
+    width: 0;
+    overflow: hidden;
+    background-color: #171717;
+    transition: all 0.5s;
+    height: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+#volume{
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+    position: relative;
+    &:hover{
+        .volume_line{
+            width: 80px !important;
+        }
+    }
+    img{
+        cursor: pointer;
+        width: 30px;
+    }
+}
+#volumeBar{
+    width: 80px;
+    height: 20px;
+    position: absolute;
+    top: 3px;
+}
+#volumeLevel{
+    height: 5px;
+    z-index: 2;
+    background-color: #DA0037;
 }

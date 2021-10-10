@@ -13,7 +13,7 @@
 <body>
     
     <div class="video_block">
-        <video autoplay muted id="video" src="media/pm.mp4" ></video>
+        <video autoplay id="video" src="media/pm.mp4" ></video>
         <div class="video_bar">
             <div id="progressBar"></div>
             <div  class="progress_bar">
@@ -21,15 +21,26 @@
                 <img src="icons/circle-regular.svg">
             </div>
             <div class="button_bar">
-                <span id="toggle">
-                    <img class="play" src="icons/play-solid.svg" alt="">
-                    <img class="pause" src="icons/pause-solid.svg" alt="">
-                </span>
-                <span class="duration">
+                <div id="toggle">
+                    <img class="play" src="icons/play-solid.svg">
+                    <img class="pause" src="icons/pause-solid.svg">
+                </div>
+                <div id="volume">
+                    <img class="volume" src="icons/volume-up-solid.svg">
+                    <div class="volume_line">
+                        <div id="volumeBar"></div>
+                        <div class="volume_bar">
+                            <div id="volumeLevel"></div>
+                            <img src="" alt="">
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="duration">
                     <small id="currentTime">0:00</small>
                     <small>/</small>
                     <small id="durationTime">0:00</small>
-                </span>
+                </div>
             </div>
             
         </div>
