@@ -17,10 +17,12 @@ body {
 }
 
 .video_block {
-  height: 70vh;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .video_block:hover .video_bar {
@@ -30,7 +32,7 @@ body {
 }
 
 .video_block video {
-  width: 100%;
+  height: 100%;
 }
 
 .video_bar {
@@ -87,13 +89,15 @@ body {
 .video_bar .progress_bar img {
   width: 10px;
   height: 10px;
-  -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
+  -webkit-transform: translate(50%, -25%);
+          transform: translate(50%, -25%);
   opacity: 0;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
   border-radius: 100%;
   background-color: #EDEDED;
+  position: absolute;
+  right: 0;
 }
 
 .video_bar .progress_bar #progress {
@@ -102,6 +106,7 @@ body {
   background-color: #DA0037;
   -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  position: relative;
 }
 
 #toggle {
@@ -141,6 +146,7 @@ body {
   position: absolute;
   top: -5px;
   cursor: pointer;
+  z-index: 2;
 }
 
 #progressBar:hover + .progress_bar {
@@ -184,14 +190,13 @@ body {
 
 #volumeBar {
   width: 80px;
-  height: 20px;
+  height: 100%;
   position: absolute;
   top: 3px;
 }
 
 #volumeLevel {
   height: 5px;
-  z-index: 2;
   background-color: #DA0037;
 }
 /*# sourceMappingURL=style.css.map */
