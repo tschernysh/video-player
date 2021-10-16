@@ -11,6 +11,7 @@ let volume = document.getElementById('volumeLevel')
 let volumeLine = document.getElementsByClassName('volume_line')
 let videoBar = document.getElementsByClassName('video_bar')[0]
 let infoDisplay = document.getElementById('infoDisplay')
+let volumeIcon = document.getElementById('volumeIcon')
 
 let progressDrag = false
 let volumeDrag = false
@@ -18,9 +19,7 @@ let volumeBarX = null
 let videoBarX = null
 let timer
 
-setInterval(() => {
-    infoDisplay.style.opacity = 0
-}, 1000);
+
 
 const updateVideoStatus = () => {
     if(video.paused){
@@ -40,27 +39,72 @@ const updateVolume = (volumeLevel) => {
     showVolumeLevel()
 }
 
+const toggleMuteVideo = () => {
+    video.muted = !video.muted
+    if(video.muted){
+        showMutedDisplay()
+        volume.style.width = 0
+        changeVolumeIcon('muted')
+    }else{
+        changeVolumeIcon('volume')
+        showVolumeLevel()
+        updateVolume(video.volume)
+    }
+}
+
+const changeVolumeIcon = (state) => {
+    switch(state){
+        case 'muted':
+            volumeIcon.attributes.src.value = 'icons/volume-mute-solid.svg'
+            return
+        case 'volume':
+            volumeIcon.attributes.src.value = 'icons/volume-up-solid.svg'
+    }
+}
+
 const timeFormatter = (seconds) => {
     seconds = Math.floor(seconds)
-    let full = Math.floor(seconds/60)
+    let hours
+    let minutes = Math.floor(seconds/60)
     let secs = seconds%60
     if(secs < 10){
         secs = '0' + secs
     }
+    if(minutes >= 60){
+        hours = Math.floor(minutes/60)
+        minutes %= 60
+    }
+    if(hours && minutes < 10){
+        minutes = '0' + minutes
+    }
 
-    return `${full}:${secs}`
+    return `${hours ? (hours + ':'): '' }${minutes}:${secs}`
 }
 
 const showVolumeLevel = () => {
+    clearInterval(timer)
     infoDisplay.innerText = `${Math.round(video.volume * 100)}%`
     infoDisplay.style.opacity = 1
-    clearInterval(timer)
+    timer = setInterval(() => {
+        infoDisplay.style.opacity = 0
+    }, 1000);
 }
 
 const showVideoDisplay = () => {
+    clearInterval(timer)
     infoDisplay.innerText = timeFormatter(Math.floor(video.currentTime))
     infoDisplay.style.opacity = 1
+    timer = setInterval(() => {
+        infoDisplay.style.opacity = 0
+    }, 1000);
+}
+const showMutedDisplay = () => {
     clearInterval(timer)
+    infoDisplay.innerText = 'muted'
+    infoDisplay.style.opacity = 1
+    timer = setInterval(() => {
+        infoDisplay.style.opacity = 0
+    }, 1000);
 }
 
 const setDuration = () => {
@@ -99,6 +143,8 @@ document.addEventListener('keydown', e => {
         updateProgress(video.currentTime, video.duration)
         showVideoDisplay()
     }else if(e.code === 'ArrowUp'){
+        video.muted = false
+        changeVolumeIcon('volume')
         if(video.volume + 0.05 >= 1){
             video.volume = 1
         }else{
@@ -106,12 +152,16 @@ document.addEventListener('keydown', e => {
         }
         updateVolume(video.volume)
     }else if(e.code === 'ArrowDown'){
+        video.muted = false
+        changeVolumeIcon('volume')
         if(video.volume - 0.05 <= 0){
             video.volume = 0
         }else{
             video.volume -=0.05
         }
         updateVolume(video.volume)
+    }else if(e.code === 'KeyM'){
+        toggleMuteVideo()
     }
 })
 video.addEventListener( 'play' , updateVideoStatus)
@@ -148,14 +198,14 @@ document.addEventListener('mousemove',  e => {
         updateCurrentTime()
         updateProgress(video.currentTime, video.duration)
     }else if(volumeDrag){
-            if(((e.clientX - volumeBarX) / volumeBar.offsetWidth) > 1){
-                video.volume = 1
-            }else if(((e.clientX - volumeBarX) / volumeBar.offsetWidth) < 0){
-                video.volume = 0
-            }else{
-                video.volume = ((e.clientX - volumeBarX) / volumeBar.offsetWidth)
-            }
-            updateVolume(video.volume)
+        if(((e.clientX - volumeBarX) / volumeBar.offsetWidth) > 1){
+            video.volume = 1
+        }else if(((e.clientX - volumeBarX) / volumeBar.offsetWidth) < 0){
+            video.volume = 0
+        }else{
+            video.volume = ((e.clientX - volumeBarX) / volumeBar.offsetWidth)
+        }
+        updateVolume(video.volume)
         }
 })
 document.addEventListener('mouseup', () => {
@@ -171,10 +221,13 @@ document.addEventListener('mouseup', () => {
 })
 
 volumeBar.addEventListener('mousedown', e => {
-    console.log(e);
+    video.muted = false        
+    changeVolumeIcon('volume')
     volumeBarX = e.clientX - e.offsetX
     volumeDrag = true
     video.volume = (Math.floor((e.offsetX / volumeBar.offsetWidth) * 100))/100
     volumeLine[0].style.width = 80 + 'px'
     updateVolume(video.volume)
 })
+volumeIcon.addEventListener('click', toggleMuteVideo )
+

@@ -104,8 +104,6 @@ body {
   height: 100%;
   width: 0%;
   background-color: #DA0037;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
   position: relative;
 }
 
@@ -186,6 +184,7 @@ body {
 #volume img {
   cursor: pointer;
   width: 30px;
+  height: 26px;
 }
 
 #volumeBar {

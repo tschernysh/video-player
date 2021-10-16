@@ -72,7 +72,6 @@ body{
             height: 100%;
             width: 0%;
             background-color: #DA0037;
-            transition: all 0.2s;
             position: relative;
         }
     }
@@ -135,6 +134,7 @@ body{
     img{
         cursor: pointer;
         width: 30px;
+        height: 26px;
     }
 }
 #volumeBar{
