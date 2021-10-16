@@ -10,10 +10,17 @@ let volumeBar = document.getElementById('volumeBar')
 let volume = document.getElementById('volumeLevel')
 let volumeLine = document.getElementsByClassName('volume_line')
 let videoBar = document.getElementsByClassName('video_bar')[0]
+let infoDisplay = document.getElementById('infoDisplay')
 
 let progressDrag = false
 let volumeDrag = false
 let volumeBarX = null
+let videoBarX = null
+let timer
+
+setInterval(() => {
+    infoDisplay.style.opacity = 0
+}, 1000);
 
 const updateVideoStatus = () => {
     if(video.paused){
@@ -30,6 +37,7 @@ const updateProgress = (currentTime, durationTime) => {
 }
 const updateVolume = (volumeLevel) => {
     volume.style.width = volumeLevel * 100  + '%'
+    showVolumeLevel()
 }
 
 const timeFormatter = (seconds) => {
@@ -41,6 +49,18 @@ const timeFormatter = (seconds) => {
     }
 
     return `${full}:${secs}`
+}
+
+const showVolumeLevel = () => {
+    infoDisplay.innerText = `${Math.round(video.volume * 100)}%`
+    infoDisplay.style.opacity = 1
+    clearInterval(timer)
+}
+
+const showVideoDisplay = () => {
+    infoDisplay.innerText = timeFormatter(Math.floor(video.currentTime))
+    infoDisplay.style.opacity = 1
+    clearInterval(timer)
 }
 
 const setDuration = () => {
@@ -59,6 +79,7 @@ const toggleVideo = async () => {
         await video.play()
     }else{
         await video.pause()
+        showVideoDisplay()
     }
 }
 
@@ -71,22 +92,40 @@ document.addEventListener('keydown', e => {
         video.currentTime = Math.floor(video.currentTime + 5)
         updateCurrentTime()
         updateProgress(video.currentTime, video.duration)
+        showVideoDisplay()
     }else if(e.code === 'ArrowLeft'){
         video.currentTime = Math.floor(video.currentTime - 5)
         updateCurrentTime()
         updateProgress(video.currentTime, video.duration)
+        showVideoDisplay()
+    }else if(e.code === 'ArrowUp'){
+        if(video.volume + 0.05 >= 1){
+            video.volume = 1
+        }else{
+            video.volume += 0.05
+        }
+        updateVolume(video.volume)
+    }else if(e.code === 'ArrowDown'){
+        if(video.volume - 0.05 <= 0){
+            video.volume = 0
+        }else{
+            video.volume -=0.05
+        }
+        updateVolume(video.volume)
     }
 })
 video.addEventListener( 'play' , updateVideoStatus)
 video.addEventListener( 'pause' , updateVideoStatus)
 video.addEventListener( 'loadeddata' , () => {
-    updateVolume(video.volume)
+    volume.style.width = video.volume * 100  + '%'
     updateVideoStatus()
     setDuration()
 })
 progressBar.addEventListener('mousedown', e => {  
+    videoBarX = e.clientX - e.offsetX
     progressDrag = true
     video.currentTime = (video.duration/100) * ( (e.offsetX * 100) / progressBar.offsetWidth)
+    showVideoDisplay()
     if(!video.paused){
         video.pause()
     }
@@ -95,47 +134,29 @@ progressBar.addEventListener('mousedown', e => {
     updateCurrentTime()
     updateProgress(video.currentTime, video.duration)
 })
-progressBar.addEventListener('mousemove', e => {
+document.addEventListener('mousemove',  e => {
     if(progressDrag){
+        showVideoDisplay()
         progress.children[0].style.opacity = 1
-        video.currentTime = (video.duration/100) * ( (e.offsetX * 100) / progressBar.offsetWidth)
-        updateCurrentTime()
-        updateProgress(video.currentTime, video.duration)
-    }
-})
-
-video.addEventListener('mousemove',  e => {
-    // console.log(e.offsetX, volumeBar.offsetWidth);
-    
-    if(progressDrag){
-        progress.children[0].style.opacity = 1
-        video.currentTime = (video.duration/100) * ( (e.offsetX * 100) / progressBar.offsetWidth)
+        if((video.duration/100) * ( ((e.clientX - videoBarX) * 100) / progressBar.offsetWidth) > video.duration){
+            video.currentTime = video.duration    
+        }else if((video.duration/100) * ( ((e.clientX - videoBarX) * 100) / progressBar.offsetWidth) < 0){
+            video.currentTime = 0
+        }else{
+            video.currentTime = (video.duration/100) * ( ((e.clientX - videoBarX) * 100) / progressBar.offsetWidth)
+        }
         updateCurrentTime()
         updateProgress(video.currentTime, video.duration)
     }else if(volumeDrag){
-        
-            console.log(e.offsetX, volumeBarX, ((e.offsetX - (volumeBarX - volumeBar.offsetWidth) )));
-            if(((e.offsetX - (volumeBarX - volumeBar.offsetWidth)  ) / volumeBar.offsetWidth) > 1){
+            if(((e.clientX - volumeBarX) / volumeBar.offsetWidth) > 1){
                 video.volume = 1
-            }else if(((e.offsetX - (volumeBarX - volumeBar.offsetWidth) ) / volumeBar.offsetWidth) < 0){
+            }else if(((e.clientX - volumeBarX) / volumeBar.offsetWidth) < 0){
                 video.volume = 0
             }else{
-                video.volume = (e.offsetX - (volumeBarX - volumeBar.offsetWidth)  ) / volumeBar.offsetWidth
+                video.volume = ((e.clientX - volumeBarX) / volumeBar.offsetWidth)
             }
             updateVolume(video.volume)
         }
-})
-volumeBar.addEventListener('mousemove', e => {
-    if(volumeDrag){
-        if((e.offsetX / volumeBar.offsetWidth) > 1){
-            video.volume = 1
-        }else if((e.offsetX / volumeBar.offsetWidth) < 0){
-            video.volume = 0
-        }else{
-            video.volume = e.offsetX / volumeBar.offsetWidth
-        }
-        updateVolume(video.volume)
-    }
 })
 document.addEventListener('mouseup', () => {
     if(progressDrag) {
@@ -153,7 +174,7 @@ volumeBar.addEventListener('mousedown', e => {
     console.log(e);
     volumeBarX = e.clientX - e.offsetX
     volumeDrag = true
-    video.volume = e.offsetX / volumeBar.offsetWidth
+    video.volume = (Math.floor((e.offsetX / volumeBar.offsetWidth) * 100))/100
     volumeLine[0].style.width = 80 + 'px'
     updateVolume(video.volume)
 })
